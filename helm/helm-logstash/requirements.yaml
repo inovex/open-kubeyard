@@ -1,0 +1,7 @@
+dependencies:
+  - name: helm-kafka
+    repository: http://127.0.0.1:8879/charts
+    version: 0.0.1
+  - name: helm-elasticsearch
+    repository: http://127.0.0.1:8879/charts
+    version: 0.0.1

@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: kibana
+  namespace: {{ .Values.image.namespace }}
+spec:
+  ports:
+    - port: 5601
+      targetPort: 5601
+      name: kibana
+  selector:
+    app: kibana
+  type: LoadBalancer

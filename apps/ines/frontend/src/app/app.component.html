@@ -1,0 +1,58 @@
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+  <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+</head>
+
+<nav class="navbar navbar-light">
+  <div class="container-fluid text-center">
+      <a class="navbar-brand"><img alt="Brand" src="../inovex-logo.svg" class="d-inline-block align-top">
+        <h2 style="color: #003C7E">{{title}}</h2>
+      </a>
+    </div>
+</nav>
+
+<div class="text-center container-fluid">
+  <input type="text" id="query" (keypress)="$event.keyCode == 13 ? search() : null" [(ngModel)]="query" placeholder="Try ... channel_name= ; user_name= ; message= ; fuzzy: [~] ; boost: [^]; AND; OR; NOT" style="width: 60%"/>
+</div>
+
+<br>
+
+<div class="container-fluid" style="width: 70%">
+  <div class="table">
+    <table class="table table-striped">
+      <thead>
+        <tr class="row">
+          <th class="col-sm-2">Created</th>
+          <th class="col-sm-2">Channel</th>
+          <th class="col-sm-2">User</th>
+          <th class="col-sm-6">Message</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let res of mattermost_results" class="row">
+          <td class="col-sm-2">{{convert(res._source.create_at)}}</td>
+          <td class="col-sm-2">{{res._source.channel_name}}</td>
+          <td class="col-sm-2">{{res._source.username}}</td>
+          <td class="col-sm-6" style ="word-break: break-word;">
+            <a class="message" [attr.href]="linkToMattermost(res._source) ? getMattermostLink(res._source) : null" target="_blank" style="text-decoration: none; color: #292b2c">
+              {{fitMessage(res._source.message)}}
+            </a>
+          </td>
+        </tr>
+        <!--<tr *ngFor="let res of newsflash_results" class="row">
+          <td class="col-sm-2">{{convert(res._source.create_at)}}</td>
+          <td class="col-sm-2">{{res._source.channel_name}}</td>
+          <td class="col-sm-2">{{res._source.username}}</td>
+          <td class="col-sm-6" style ="word-break: break-word;">
+            <a style="text-decoration: none; color: #292b2c">
+              {{fitMessage(res._source.message)}}
+            </a>
+          </td>
+        </tr>-->
+      </tbody>
+    </table>
+  </div>
+</div>

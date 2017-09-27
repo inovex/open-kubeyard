@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "fullname" . }}-etc
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+data:
+  nginx.conf: |
+{{ include (print $.Template.BasePath "/etc/_nginx.conf.tpl") . | indent 4  }}
+  cert.pem: |
+{{ include (print $.Template.BasePath "/etc/_cert.pem.tpl") . | indent 4  }}
+  key.pem: |
+{{ include (print $.Template.BasePath "/etc/_key.pem.tpl") . | indent 4  }}

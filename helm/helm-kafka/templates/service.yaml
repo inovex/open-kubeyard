@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka
+  namespace: {{ .Values.image.namespace }}
+  labels:
+    app:
+      kafka
+spec:
+  ports:
+  - name: kafka-port
+    port: 9092
+  clusterIP: None
+  selector:
+    app: kafka

@@ -1,0 +1,8 @@
+image:
+  registry_path: "dockerImageRegestry"
+  name_hub: "docker-jupyterhub"
+  name_notebook: "docker-jupyter"
+  pull_policy: "latest"
+  namespace: "kubeyard"
+nfs:
+  filer_ip: 10.27.242.32

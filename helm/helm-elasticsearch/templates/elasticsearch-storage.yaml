@@ -1,0 +1,10 @@
+---
+kind: StorageClass
+apiVersion: storage.k8s.io/v1beta1
+metadata:
+  name: es-disk
+  namespace: {{ .Values.image.namespace }}
+provisioner: kubernetes.io/gce-pd
+parameters:
+  type: pd-ssd
+  zone: europe-west1-b

@@ -1,0 +1,20 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: zeppelin-service
+  labels:
+    app: sparktraining
+spec:
+  ports:
+    - port: {{ .Values.service.httpPort}}
+      targetPort: {{ .Values.service.httpPort}}
+      name: http
+    - port: {{ .Values.service.sparkUiPort}}
+      targetPort: {{ .Values.service.sparkUiPort}}
+      name: spark-ui
+    - port: {{ .Values.service.sshPort}}
+      targetPort: {{ .Values.service.sshPort}}
+      name: ssh
+  selector:
+    app: zeppelin
+  type: LoadBalancer

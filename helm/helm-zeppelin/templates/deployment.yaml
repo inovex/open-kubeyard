@@ -1,0 +1,42 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: zeppelin
+  namespace: {{ .Values.image.namespace }}
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: zeppelin
+    spec:
+      containers:
+        - name: zeppelin
+          image: {{ .Values.image.registry_path }}/{{ .Values.image.name }}:{{ .Values.image.tag }}
+          ports:
+            - containerPort: {{ .Values.service.httpPort}}
+              name: http
+            - containerPort: {{ .Values.service.sparkUiPort}}
+              name: spark-ui
+            - containerPort: {{ .Values.service.sshPort}}
+              name: ssh
+          imagePullPolicy: Always
+          env:
+            {{- if .Values.storage }}
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{.Release.Name}}-aws-credentials
+                  key: awsSecretAccessKey
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{.Release.Name}}-aws-credentials
+                  key: awsAccessKeyId
+            - name: "ZEPPELIN_NOTEBOOK_S3_BUCKET"
+              value: {{ .Values.storage.zeppelinNotebookS3Bucket}}
+            - name: "ZEPPELIN_NOTEBOOK_S3_USER"
+              value: {{ .Values.storage.zeppelinNotebookS3User}}
+            {{- end }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}

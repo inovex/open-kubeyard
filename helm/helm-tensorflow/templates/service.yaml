@@ -1,0 +1,20 @@
+{{- $port := .Values.image.port -}}
+
+---
+{{- range $job, $nb := .Values.tfCluster.settings.jobs }}
+{{ range $i, $e := until (int $nb) | default 8 }}
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ $job }}-{{$i}}
+spec:
+  ports: 
+  - port: {{ $port }}
+    targetPort: {{ $port }}
+    protocol: TCP
+  selector:
+    job: {{ $job }}
+    task: t{{$i}}
+---
+{{ end }}
+{{- end }}

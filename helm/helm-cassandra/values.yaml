@@ -1,0 +1,7 @@
+image:
+  registry_path: "dockerImageRegestry"
+  name: "docker-cassandra"
+  tag: "latest"
+  namespace: "kubeyard"
+cassandra:
+  replicas: 1

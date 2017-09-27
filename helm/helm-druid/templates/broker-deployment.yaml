@@ -1,0 +1,49 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ tuple (print (include "name" .) "-broker") . | include "fqan" }}
+  labels:
+    app: {{ tuple (print (include "name" .) "-broker") . | include "fqan" }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ tuple (print (include "name" .) "-broker") . | include "fqan" }}
+      annotations:
+        checksum/config-common: {{ include (print $.Template.BasePath "/common-configmap.yaml") . | sha256sum  }}
+        checksum/config-broker: {{ include (print $.Template.BasePath "/broker-configmap.yaml") . | sha256sum  }}
+    spec:
+      containers:
+      - name: druid
+        image: "{{ .Values.image.registry_path }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pull_policy }}
+        args:
+        - druid
+        - start
+        - broker
+        ports:
+        - name: broker
+          containerPort: 8082
+          protocol: TCP
+        resources:
+{{ toYaml .Values.broker.resources | indent 10 }}
+        volumeMounts:
+        - mountPath: /opt/druid/conf/druid/_common
+          name: common-config-volume
+        - mountPath: /opt/druid/conf/druid/broker
+          name: broker-config-volume
+      initContainers:
+      - name: wait-for-zookeeper
+        image: busybox
+        command: ['sh', '-c', 'until nslookup  {{ default "zookeeper" .Values.init.zookeeper  }}; do echo waiting for zookeeper; sleep 2; done;']
+      volumes:
+      - name: common-config-volume
+        configMap:
+          name: {{ tuple (print (include "name" .) "-common") . | include "fqan" }}
+      - name: broker-config-volume
+        configMap:
+          name: {{ tuple (print (include "name" .) "-broker") . | include "fqan" }}
+

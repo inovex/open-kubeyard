@@ -1,0 +1,2 @@
+helm-sshd:
+  pubkey: <some key>

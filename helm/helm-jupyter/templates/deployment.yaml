@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  namespace: {{ .Values.image.namespace }}
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: {{ template "fullname" . }}
+    spec:
+      containers:
+        - name: jupyter
+          image: {{ .Values.image.registry_path }}/{{ .Values.image.name }}:{{ .Values.image.pull_policy }}
+          ports:
+            - containerPort: 8888

@@ -1,0 +1,47 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: {{ tuple (print (include "name" .) "-historical") . | include "fqan" }}
+  labels:
+    app: {{ tuple (print (include "name" .) "-historical") . | include "fqan" }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  serviceName: {{ tuple (print (include "name" .) "-historical") . | include "fqan" }}
+  replicas: {{ default 2 .Values.replicas }}
+  template:
+    metadata:
+      labels:
+        app: {{ tuple (print (include "name" .) "-historical") . | include "fqan" }}
+      annotations:
+        checksum/config-common: {{ include (print $.Template.BasePath "/common-configmap.yaml") . | sha256sum  }}
+        checksum/config-historical: {{ include (print $.Template.BasePath "/historical-configmap.yaml") . | sha256sum  }}
+    spec:
+      containers:
+      - name: druid
+        image: "{{ .Values.image.registry_path }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pull_policy }}
+        args:
+        - druid
+        - start
+        - historical
+        ports:
+        - name: historical
+          containerPort: 8083
+          protocol: TCP
+        resources:
+{{ toYaml .Values.historical.resources | indent 10 }}
+        volumeMounts:
+        - mountPath: /opt/druid/conf/druid/_common
+          name: common-config-volume
+        - mountPath: /opt/druid/conf/druid/historical
+          name: historical-config-volume
+      volumes:
+      - name: common-config-volume
+        configMap:
+          name: {{ tuple (print (include "name" .) "-common") . | include "fqan" }}
+      - name: historical-config-volume
+        configMap:
+          name: {{ tuple (print (include "name" .) "-historical") . | include "fqan" }}
+

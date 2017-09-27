@@ -1,0 +1,13 @@
+image:
+  repo: "dockerImageRegestry"
+  name: "docker-tensorflow"
+  tag: "latest"
+  pull_policy: "Always"
+  namespace: "kubeyard"
+  port: 5000
+tfCluster:
+  startScript: train.py
+  settings:
+    jobs:
+      ps: 1
+      worker: 2

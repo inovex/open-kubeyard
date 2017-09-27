@@ -1,0 +1,82 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "hdfs-namenode-fqan" . }}
+  labels:
+    app: {{ template "hdfs-namenode-fqan" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ template "hdfs-namenode-fqan" . }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum  }}
+        pod.alpha.kubernetes.io/init-containers: '[
+            {
+                "name": "mount-permissions-fix",
+                "image": "busybox",
+                "imagePullPolicy": "IfNotPresent",
+                "command": ["/bin/sh"],
+                "args": ["-c", "chown -R 100:101 /data/dfs/nn"],
+                "volumeMounts": [
+                    {
+                      "name": "data-volume",
+                      "mountPath": "/data/dfs/nn"
+                    }
+                ]
+            },
+            {
+                "name": "namenode-format",
+                "image": "{{ .Values.image.registry_path }}/{{ .Values.image.name }}:{{ .Values.image.tag }}",
+                "imagePullPolicy": "{{ .Values.image.pull_policy }}",
+                "args": ["bash", "-c", "if [ ! -e /data/dfs/nn/current ]; then echo Y | hdfs namenode -format; fi"],
+                "volumeMounts": [
+                    {
+                      "name": "data-volume",
+                      "mountPath": "/data/dfs/nn"
+                    },
+                    {
+                      "name": "config-volume",
+                      "mountPath": "/etc/hadoop"
+                    }
+                ]
+            }
+        ]'
+    spec:
+      containers:
+      - name: hadoop
+        image: "{{ .Values.image.registry_path }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pull_policy }}
+        args:
+        - hdfs
+        - namenode
+        ports:
+        - name: ipc
+          containerPort: 9000
+          protocol: TCP
+        - name: http
+          containerPort: 50070
+          protocol: TCP
+        resources:
+{{ toYaml .Values.hdfs.namenode.resources | indent 10 }}
+        volumeMounts:
+        - mountPath: /etc/hadoop
+          name: config-volume
+        - mountPath: /data/dfs/nn
+          name: data-volume
+      volumes:
+      - name: config-volume
+        configMap:
+          name: {{ template "fullname" . }}
+      - name: data-volume
+      {{- if .Values.hdfs.namenode.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ template "hdfs-namenode-fqan" . }}
+      {{- else }}
+        emptyDir: {}
+      {{- end -}}

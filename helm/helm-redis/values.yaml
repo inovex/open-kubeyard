@@ -1,0 +1,6 @@
+image:
+  registry_path: "dockerImageRegestry"
+  name: "docker-redis"
+  tag: "latest"
+  pull_policy: "IfNotPresent"
+  namespace: "kubeyard"

@@ -1,0 +1,54 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: elasticsearch-statefulset
+  namespace: {{ .Values.image.namespace }}
+spec:
+  serviceName: "elasticsearch"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: elasticsearch
+      annotations:
+        pod.beta.kubernetes.io/init-containers: '[
+          {
+          "name": "sysctl",
+            "image": "busybox",
+            "command": ["sysctl", "-w", "vm.max_map_count=262144"],
+            "imagePullPolicy": "IfNotPresent",
+            "securityContext": {
+              "privileged": true
+            }
+          }
+        ]'
+    spec:
+      containers:
+        - name: elasticsearch
+          image: {{ .Values.image.registry_path }}/{{ .Values.image.name }}:{{ .Values.image.tag }}
+          ports:
+            - containerPort: 9200
+            - containerPort: 9300
+          imagePullPolicy: Always
+          securityContext:
+            privileged: true
+          env:
+          - name: CLUSTER_NAME
+            value: kubernetes-es-cluster
+          - name: ES_VERSION
+            value: 5.2.0
+          - name: ES_MEM_SIZE
+            value: 2G # must be java format
+          volumeMounts:
+          - mountPath: "/es-data"
+            name: es-data
+  volumeClaimTemplates:
+    - metadata:
+        name: es-data
+        annotations:
+          volume.beta.kubernetes.io/storage-class: "es-disk"
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi

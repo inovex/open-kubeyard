@@ -1,0 +1,29 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: jupyterhub-api
+  namespace: {{ .Values.image.namespace }}
+spec:
+  selector:
+    app: jupyterhub
+  ports:
+    - protocol: TCP
+      port: 8081
+      targetPort: 8081
+      name: api
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: jupyterhub-ui
+  namespace: {{ .Values.image.namespace }}
+spec:
+  type: NodePort
+  selector:
+    app: jupyterhub
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+      name: ui
+      nodePort: 30000

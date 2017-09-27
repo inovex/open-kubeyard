@@ -1,0 +1,6 @@
+newsflash-loader/*.pyc
+newsflash-loader/secret/
+newsflash-loader/.idea/
+newsflash-loader/credentials/*
+newsflash-loader/output/
+

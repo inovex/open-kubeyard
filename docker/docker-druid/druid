@@ -1,0 +1,85 @@
+#!/bin/bash
+
+set -eu
+
+druid_lib_dir="$DRUID_HOME/lib"
+druid_config_dir="$DRUID_HOME/conf/druid"
+druid_quickstart_dir="$DRUID_HOME/quickstart"
+
+function start_server {
+	node_type="$1"
+	
+	mapfile -t java_opts < "$druid_config_dir/$node_type/jvm.config";
+	classpath="$druid_config_dir/_common:$druid_config_dir/$node_type:$druid_lib_dir/*"
+	java_opts+=(-cp "$classpath")
+	
+	java "${java_opts[@]}" io.druid.cli.Main server "$node_type"
+}
+
+function quickstart {
+	case $1 in
+		load)
+		cd "$druid_quickstart_dir"
+		curl -X 'POST' -H 'Content-Type:application/json' -d @wikiticker-index.json "${QUICKSTART_OVERLORD:-localhost:8090}/druid/indexer/v1/task"
+		;;
+		query)
+		cd "$druid_quickstart_dir"
+		curl -X 'POST' -H 'Content-Type:application/json' -d @wikiticker-top-pages.json "http://${QUICKSTART_BROKER:-localhost:8082}/druid/v2/?pretty"
+		;;
+	esac
+}
+
+function usage {
+	echo "Usage: druid [Option]... COMMAND"
+}
+
+while [[ $# -gt 0 && $1 == -* ]]
+	do
+	key="$1"
+
+	case $key in
+	    --help)
+	    usage
+	    exit 0
+	    ;;
+	    *)
+	    echo "Unknown option $key"
+	    exit 1
+	    ;;
+	esac
+	shift
+done
+
+if [[ -n $1 ]]; then
+	command=$1
+	shift
+else
+	echo "Missing argument COMMAND"
+	usage
+	exit 1
+fi
+
+case "$command" in
+	"start" )
+		if [[ -n $1 ]]; then
+			start_server "$1"
+		else
+			echo "Missing argument for command start: <node_type>"
+			usage
+			exit 1
+		fi
+		;;
+	"quickstart")
+		if [[ -n $1 ]]; then
+			quickstart "$1"
+		else
+			echo "Missing argument for command quickstart: <load|query>"
+			usage
+			exit 1
+		fi
+		;;
+	* )
+		echo "Invalid command: $command"
+		exit 1
+		;;
+esac

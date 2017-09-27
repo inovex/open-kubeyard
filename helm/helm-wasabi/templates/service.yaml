@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: wasabi-service
+  namespace: {{ .Values.image.namespace }}
+  labels:
+    app: wasabi
+spec:
+  ports:
+  - name: wasabi
+    port: 8080
+    targetPort: 8080
+  - name: ui
+    port: 9000
+    targetPort: 9000
+  - name: ui-livereload
+    port: 35729
+    targetPort: 35729
+  - name: ui-test
+    port: 9001
+    targetPort: 9001
+  selector:
+    app: wasabi
+  type: LoadBalancer
+  loadBalancerIP: {{ .Values.wasabi.host }}

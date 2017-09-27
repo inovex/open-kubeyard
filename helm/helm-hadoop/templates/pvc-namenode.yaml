@@ -1,0 +1,23 @@
+{{- if .Values.hdfs.namenode.persistence.enabled }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ template "hdfs-namenode-fqan" . }}
+  labels:
+    app: {{ template "hdfs-namenode-fqan" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+  annotations:
+  {{- if .Values.hdfs.namenode.persistence.storageClass }}
+    volume.beta.kubernetes.io/storage-class: {{ .Values.hdfs.namenode.persistence.storageClass | quote }}
+  {{- else }}
+    volume.alpha.kubernetes.io/storage-class: default
+  {{- end }}
+spec:
+  accessModes:
+    - {{ .Values.hdfs.namenode.persistence.accessMode | quote }}
+  resources:
+    requests:
+      storage: {{ .Values.hdfs.namenode.persistence.size | quote }}
+{{- end }}

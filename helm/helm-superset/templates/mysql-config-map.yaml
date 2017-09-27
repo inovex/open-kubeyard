@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-config-map
+  namespace: {{ .Values.image.namespace }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+data:
+  10_druid_create_db.sql: |
+{{ include (print $.Template.BasePath "/init/_10_druid_create_db.sql.tpl") . | indent 4  }}
+  11_druid_create_tables.sql: |
+{{ include (print $.Template.BasePath "/init/_11_druid_create_tables.sql.tpl") . | indent 4  }}
+  20_superset_create_db.sql: |
+{{ include (print $.Template.BasePath "/init/_20_superset_create_db.sql.tpl") . | indent 4  }}

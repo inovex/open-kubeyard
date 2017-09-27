@@ -1,0 +1,9 @@
+cluster.name: ${CLUSTER_NAME}
+node.name: ${HOSTNAME}
+network.host: 0.0.0.0
+http.port: ${ELASTICSEARCH_SERVICE_PORT_HTTP}
+bootstrap.memory_lock: true
+transport.tcp.port: ${ELASTICSEARCH_SERVICE_PORT_DISCOVERY}
+discovery.zen.ping.unicast.hosts: ["${ELASTICSEARCH_SERVICE_HOST}:${ELASTICSEARCH_SERVICE_PORT_DISCOVERY}"]
+path.data: /es-data/data
+path.logs: /es-data/logs

@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ines
+  namespace: {{ .Values.image.namespace }}
+  labels:
+    component: ines
+spec:
+  ports:
+  - port: 8080
+    targetPort: 8080
+  selector:
+    component: ines
+  type: LoadBalancer
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ines
+  namespace: {{ .Values.image.namespace }}
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: ines
+    spec:
+      containers:
+      - name: ines
+        image: {{ .Values.image.registry_path }}/{{ .Values.image.name }}:{{ .Values.image.tag }}
+        ports:
+          - containerPort: 8080
+        imagePullPolicy: Always

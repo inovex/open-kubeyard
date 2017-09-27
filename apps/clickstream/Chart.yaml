@@ -1,0 +1,12 @@
+name: clickstream
+version: 0.0.1
+description: App for clickstream processing.
+keywords:
+  - clickstream
+  - kafka
+  - divolte
+  - druid
+maintainers: # (optional)
+  - name: David Rohatschek
+    email: drohatschek@inovex.de
+engine: gotpl # The name of the template engine (optional, defaults to gotpl)

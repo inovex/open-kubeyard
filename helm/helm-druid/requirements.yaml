@@ -1,0 +1,19 @@
+dependencies:
+  - name: helm-toolkit
+    repository: http://127.0.0.1:8879/charts
+    version: 0.0.1
+  - name: helm-superset
+    repository: http://127.0.0.1:8879/charts
+    version: 0.0.1
+  - name: helm-tranquility
+    repository: http://127.0.0.1:8879/charts
+    version: 0.0.1
+  - name: helm-divolte
+    repository: http://127.0.0.1:8879/charts
+    version: 0.0.1
+  - name: helm-metabase
+    repository: http://127.0.0.1:8879/charts
+    version: 0.0.1
+  - name: helm-hadoop
+    repository: http://127.0.0.1:8879/charts
+    version: 0.0.1

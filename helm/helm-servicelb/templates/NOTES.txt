@@ -1,0 +1,17 @@
+Annotate all pods which should use SSL with: 
+
+```
+  annotations:
+    serviceloadbalancer/lb.sslTerm: "true"
+```
+
+or for testing:
+kubectl annotate pod <name> serviceloadbalancer/lb.sslTerm="true"
+
+annotate one node with role=loadbalancer:
+
+node=`kubectl get nodes -o json | jq -r '.items[0].metadata.name'`; kubectl label node $node role=loadbalancer
+
+Get the IP of annotated pods:
+
+kubectl get node -l role=loadbalancer -o json | jq -r '.items[].status.addresses[] | select(.type == "ExternalIP") | .address'

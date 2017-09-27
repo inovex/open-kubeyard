@@ -1,0 +1,94 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: jupyterhub
+  namespace: {{ .Values.image.namespace }}
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: jupyterhub
+    spec:
+      containers:
+      - name: jupyterhub
+        image: {{ .Values.image.registry_path }}/{{ .Values.image.name_hub }}:{{ .Values.image.pull_policy }} # originally <REPOSITORY_IMAGE_PATH>/jupyterhub:latest
+        livenessProbe:
+          exec:
+            command: ["bash", "-c", "bash -c 'timeout -s 9 -k 10s 5s sed -n \"1w /mnt/jupyterhub/podhealth\" <<< \"$(date +%F_%H:%M:%S)\" && echo ok'"]
+          initialDelaySeconds: 45
+          timeoutSeconds: 2
+          periodSeconds: 20
+        ports:
+        - containerPort: 8081
+        - containerPort: 8000
+        env:
+        - name: KSPAWN_HUB_IP
+          value: "jupyterhub-api.kubeyard.svc.cluster.local:8081"
+        - name: JHUB_SPWN_DEBUG
+          value: "TRUE"
+        - name: JHUB_LOG_LEVEL
+          value: DEBUG
+        - name: KUBESPAWN_NFS_PATH
+          value: '/notebooks/{username}' # originally '<FILER_PATH>/notebooks/{username}'
+        - name: KUBESPAWN_NFS_SERVER
+          value: '{{ .Values.nfs.filer_ip }}'
+        - name: KUBESPAWN_IMAGE
+          value: {{ .Values.image.registry_path }}/{{ .Values.image.name_notebook }}:{{ .Values.image.pull_policy }} # originally '<REPOSITORY_IMAGE_PATH>/<SINGLE_USER_IMAGE>'
+        - name: KUBESPAWN_CPU_LIMIT
+          value: '3000m'
+        - name: KUBESPAWN_CPU_REQUEST
+          value: '200m'
+        - name: KUBESPAWN_MEM_LIMIT
+          value: '2Gi'
+        - name: KUBESPAWN_MEM_REQUEST
+          value: '256Mi'
+        - name: SHARED_PATH
+          value: '/mnt/jupyterhub'
+        - name: KSPAWN_NAMESPACE
+          value: {{ .Values.image.namespace }}
+        # - name: OAUTH_CLIENT_ID
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: jupyterhub
+        #       key: oauth-client-id
+        # - name: OAUTH_CLIENT_SECRET
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: jupyterhub
+        #       key: oauth-client-secret
+        # - name: OAUTH_CALLBACK_URL
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: jupyterhub
+        #       key: oauth-callback-url
+        - name: ADMIN_USERS
+          valueFrom:
+            configMapKeyRef:
+              name: jupyterhub-config
+              key: admin-users
+        - name: OAUTH_WHITELIST
+          valueFrom:
+            configMapKeyRef:
+              name: jupyterhub-config
+              key: oauth-whitelist
+        volumeMounts:
+        - mountPath: /mnt/jupyterhub
+          name: nfs
+        - mountPath: /mnt/configmap
+          name: manifests
+        resources:
+          limits:
+            cpu: 100m
+            memory: 1000Mi
+          requests:
+            cpu: 100m
+            memory: 1000Mi
+      volumes:
+      - name: nfs
+        nfs:
+          server: {{ .Values.nfs.filer_ip }} # originally <FILER_IP>
+          path: "/" # originally <FILER_PATH>"
+      - name: manifests
+        configMap:
+          name: jhub-manifests

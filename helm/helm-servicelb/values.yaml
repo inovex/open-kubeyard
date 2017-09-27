@@ -1,0 +1,46 @@
+# Default values for service-loadbalancer.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+replicaCount: 1
+image:
+  repository: gcr.io/google_containers/servicelb
+  tag: 0.4
+  pullPolicy: IfNotPresent
+main:
+  name: service-loadbalancer
+  namespace: test
+  internalPort: 8081
+serviceHttp:
+  http:
+    containerPort: 80
+    hostPort: 80
+    protocol: TCP
+  haproxyStats:
+    containerPort: 1936
+    hostPort: 1936
+    protocol: TCP
+serviceTcp:
+  mysql:
+    containerPort: 3306
+    hostPort: 3306
+    protocol: TCP
+  hiveMQ:
+    containerPort: 1883
+    hostPort: 1883
+    protocol: TCP
+  nginx:
+    containerPort: 443
+    hostPort: 8080
+    protocol: TCP
+tcpServices:
+  "my-release-mysql:3306,nginxsvc:443,hivemq-service:1883"
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+ssl:
+  #set your key here
+  pem: "here"

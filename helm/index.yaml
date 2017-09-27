@@ -1,0 +1,220 @@
+apiVersion: v1
+entries:
+  helm-cassandra:
+  - created: 2017-08-24T10:43:50.847103768+02:00
+    digest: 8eb81363df6ca2319eccf689a610fd8d7fe1a873228e526b4d8d54ae145bccab
+    name: helm-cassandra
+    urls:
+    - http://helmrepo.storage.googleapis.com/helm-cassandra-0.0.1.tgz
+    version: 0.0.1
+  helm-divolte:
+  - created: 2017-08-24T10:43:50.848034317+02:00
+    digest: 59f403142097d6716c96bf6d839a9411c9c4323a2dde2c8eb30502664ccbe514
+    name: helm-divolte
+    urls:
+    - http://helmrepo.storage.googleapis.com/helm-divolte-0.0.1.tgz
+    version: 0.0.1
+  helm-druid:
+  - created: 2017-08-24T10:43:50.853008606+02:00
+    digest: 8754708e43919b3445e3cad03dbaeab1368eced7c90badec62d62ecec11e9e6f
+    name: helm-druid
+    urls:
+    - http://helmrepo.storage.googleapis.com/helm-druid-0.0.1.tgz
+    version: 0.0.1
+  helm-elasticsearch:
+  - created: 2017-08-24T10:43:50.853152688+02:00
+    digest: 5c85e29d08c3d66a177cedff60bda187c2b620222f443d70c9288cedb4c7b590
+    name: helm-elasticsearch
+    urls:
+    - http://helmrepo.storage.googleapis.com/helm-elasticsearch-0.0.1.tgz
+    version: 0.0.1
+  helm-external-dns:
+  - created: 2017-08-24T10:43:50.853277226+02:00
+    digest: 05c251ca32ede40017b051f1a3589c1f651632e9a421ac9ccfb7efd72f33a2db
+    name: helm-external-dns
+    urls:
+    - http://helmrepo.storage.googleapis.com/helm-external-dns-0.0.1.tgz
+    version: 0.0.1
+  helm-hadoop:
+  - created: 2017-08-24T10:43:50.854572206+02:00
+    digest: 196b0defbaf291cc6c4ebc4c0a1b72c225ac72d727a408937c28106a559e83c9
+    name: helm-hadoop
+    urls:
+    - http://helmrepo.storage.googleapis.com/helm-hadoop-0.0.1.tgz
+    version: 0.0.1
+  helm-jupyter:
+  - created: 2017-08-24T10:43:50.854736586+02:00
+    digest: 219b794c200c8c5ec2b1c01bc892e53c7f617f2af826ac2d0d3241c1a66f48ad
+    name: helm-jupyter
+    urls:
+    - http://helmrepo.storage.googleapis.com/helm-jupyter-0.0.1.tgz
+    version: 0.0.1
+  helm-jupyterhub:
+  - created: 2017-08-24T10:43:50.854943327+02:00
+    digest: d43883f38cb72f8a5bfb127fc7c5cd781ba17f6f6829c48bb4b609be7c1daa58
+    name: helm-jupyterhub
+    urls:
+    - http://helmrepo.storage.googleapis.com/helm-jupyterhub-0.0.1.tgz
+    version: 0.0.1
+  helm-kafka:
+  - created: 2017-08-24T10:43:50.855430568+02:00
+    digest: f0e2971f0f2b0981de96e60a9942c858221c6b1a56960c1204fd834f12a614b8
+    name: helm-kafka
+    urls:
+    - http://helmrepo.storage.googleapis.com/helm-kafka-0.0.1.tgz
+    version: 0.0.1
+  helm-kibana:
+  - created: 2017-08-24T10:43:50.855687515+02:00
+    digest: 968eef13f07e8bbe2fcc73d0fbaa759ca01fe3de43726b18437533c01291b3dc
+    name: helm-kibana
+    urls:
+    - http://helmrepo.storage.googleapis.com/helm-kibana-0.0.1.tgz
+    version: 0.0.1
+  helm-logstash:
+  - created: 2017-08-24T10:43:50.856589775+02:00
+    digest: ef1732957f057bcc20d88e1801f821bba1b8f52b479ce04a61738f9447826ad6
+    name: helm-logstash
+    urls:
+    - http://helmrepo.storage.googleapis.com/helm-logstash-0.0.1.tgz
+    version: 0.0.1
+  helm-mattermost-loader:
+  - apiVersion: v1
+    created: 2017-08-24T10:43:50.856735112+02:00
+    digest: 30b18da6d80a6477e4a8ddf6448a235ef67c63cfd6e81c8370a5152be27c1f9c
+    name: helm-mattermost-loader
+    urls:
+    - http://helmrepo.storage.googleapis.com/helm-mattermost-loader-0.0.1.tgz
+    version: 0.0.1
+  helm-metabase:
+  - created: 2017-08-24T10:43:50.856856312+02:00
+    digest: 1f9086a26fc191c1e9c4d9681c8e9846c4859863e997b595186e62aedf6dc4d7
+    name: helm-metabase
+    urls:
+    - http://helmrepo.storage.googleapis.com/helm-metabase-0.0.1.tgz
+    version: 0.0.1
+  helm-mysql:
+  - created: 2017-08-24T10:43:50.857211597+02:00
+    digest: 3d6523b1eed3c26271695fe576c65bb1302bbbb487dd5c62b601256f56cac88d
+    name: helm-mysql
+    urls:
+    - http://helmrepo.storage.googleapis.com/helm-mysql-0.0.1.tgz
+    version: 0.0.1
+  helm-newsflash-loader:
+  - apiVersion: v1
+    created: 2017-08-24T10:43:50.857341199+02:00
+    digest: 83889aed0c003af3fc947b12eeff85f5b1f32f35e0efd4f65856282faa7300dc
+    name: helm-newsflash-loader
+    urls:
+    - http://helmrepo.storage.googleapis.com/helm-newsflash-loader-0.0.1.tgz
+    version: 0.0.1
+  helm-nfs:
+  - created: 2017-08-24T10:43:50.857468724+02:00
+    digest: 9c4e3cdcd45dde85ad2886d21c2767aee0399a333dd0cfd91e255695c32f1d5c
+    name: helm-nfs
+    urls:
+    - http://helmrepo.storage.googleapis.com/helm-nfs-0.0.1.tgz
+    version: 0.0.1
+  helm-nginx:
+  - created: 2017-08-24T10:43:50.857780724+02:00
+    digest: eada7f699c54f58c9174a542479bc2f44ce4fc8ea4c06d724a73aa18bc80aa52
+    name: helm-nginx
+    urls:
+    - http://helmrepo.storage.googleapis.com/helm-nginx-0.0.1.tgz
+    version: 0.0.1
+  helm-redis:
+  - created: 2017-08-24T10:43:50.857979927+02:00
+    digest: efd3f211c069d27609c2836871026b53893343ca0356c212585ce7236a434cca
+    name: helm-redis
+    urls:
+    - http://helmrepo.storage.googleapis.com/helm-redis-0.0.1.tgz
+    version: 0.0.1
+  helm-servicelb:
+  - apiVersion: v1
+    created: 2017-08-24T10:43:50.858316992+02:00
+    description: A Helm chart for Kubernetes
+    digest: 21aba9439dc85a1fd312fa2092e906c4fc2a5855eaf932afecb1823990533de8
+    name: helm-servicelb
+    urls:
+    - http://helmrepo.storage.googleapis.com/helm-servicelb-0.1.0.tgz
+    version: 0.1.0
+  helm-spark:
+  - created: 2017-08-24T10:43:50.858504689+02:00
+    digest: fae778e32de8023743d11961d5a26b7a26f2f8099a9f90fa56b5894c0d3cecd4
+    name: helm-spark
+    urls:
+    - http://helmrepo.storage.googleapis.com/helm-spark-0.0.1.tgz
+    version: 0.0.1
+  helm-sshd:
+  - created: 2017-08-24T10:43:50.858829224+02:00
+    digest: ea3085d3feb5faf1807ffc4037fdf710e38a555c876e3fc3fba82cc911af36ff
+    name: helm-sshd
+    urls:
+    - http://helmrepo.storage.googleapis.com/helm-sshd-0.0.1.tgz
+    version: 0.0.1
+  helm-superset:
+  - created: 2017-08-24T10:43:50.859755556+02:00
+    digest: 4ebd43118f9fb6bcfb2905b5878afe573bb5622f981fe6585427543fa7abd0a1
+    name: helm-superset
+    urls:
+    - http://helmrepo.storage.googleapis.com/helm-superset-0.0.1.tgz
+    version: 0.0.1
+  helm-tensorflow:
+  - created: 2017-08-24T10:43:50.860000044+02:00
+    digest: 336c8807fa563f4e1de54e7f84b4a25d89065212747b7a89215ad42977480dd3
+    name: helm-tensorflow
+    urls:
+    - http://helmrepo.storage.googleapis.com/helm-tensorflow-0.0.1.tgz
+    version: 0.0.1
+  helm-toolkit:
+  - created: 2017-08-24T10:43:50.86013549+02:00
+    digest: 24397c312f8b522060f0e6fc85ec06cfb2623afd5903be8b23f75631b83e89c4
+    name: helm-toolkit
+    urls:
+    - http://helmrepo.storage.googleapis.com/helm-toolkit-0.0.1.tgz
+    version: 0.0.1
+  helm-tranquility:
+  - created: 2017-08-24T10:43:50.860505351+02:00
+    digest: 61aa41823ca06ace30b59a492629cf6f61ffe8b2773bbb41a47470e2a3e57784
+    name: helm-tranquility
+    urls:
+    - http://helmrepo.storage.googleapis.com/helm-tranquility-0.0.1.tgz
+    version: 0.0.1
+  helm-wasabi:
+  - created: 2017-08-24T10:43:50.861031265+02:00
+    description: A Helm chart for Kubernetes
+    digest: 72ba2c51559b0f2646af024980e89026a9bde8b69c281130f87d7b9748a31e6d
+    name: helm-wasabi
+    urls:
+    - http://helmrepo.storage.googleapis.com/helm-wasabi-0.0.1.tgz
+    version: 0.0.1
+  helm-wasabi-cassandra:
+  - created: 2017-08-24T10:43:50.86120271+02:00
+    description: A Helm chart for Kubernetes
+    digest: 54821fbb4100d33e26d4cabc5db863ded99331671ae48fdecdddde11c083c983
+    name: helm-wasabi-cassandra
+    urls:
+    - http://helmrepo.storage.googleapis.com/helm-wasabi-cassandra-0.0.1.tgz
+    version: 0.0.1
+  helm-wasabi-mysql:
+  - created: 2017-08-24T10:43:50.861413795+02:00
+    description: A Helm chart for Kubernetes
+    digest: f0bc375a6178e1286b8de3df8fac1b6c21133330117f0407508fac2dbe0baf00
+    name: helm-wasabi-mysql
+    urls:
+    - http://helmrepo.storage.googleapis.com/helm-wasabi-mysql-0.0.1.tgz
+    version: 0.0.1
+  helm-zeppelin:
+  - created: 2017-08-24T10:43:50.861756011+02:00
+    digest: def6504f8178b02cf6935dc4582281d902da1f5800bc9329579e1ad0b998e110
+    name: helm-zeppelin
+    urls:
+    - http://helmrepo.storage.googleapis.com/helm-zeppelin-0.0.1.tgz
+    version: 0.0.1
+  helm-zookeeper:
+  - created: 2017-08-24T10:43:50.863548468+02:00
+    digest: e1d6dac734c3a88e68ffb77f68dcbf24d39996ef4e5b860825bda4dae6c27b09
+    name: helm-zookeeper
+    urls:
+    - http://helmrepo.storage.googleapis.com/helm-zookeeper-0.0.1.tgz
+    version: 0.0.1
+generated: 2017-08-24T10:43:50.846735045+02:00

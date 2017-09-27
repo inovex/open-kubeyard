@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ tuple (print (include "name" .) "-overlord") . | include "fqan" }}
+  labels:
+    app: {{ tuple (print (include "name" .) "-overlord") . | include "fqan" }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+data:
+  jvm.config: |
+{{ include (print $.Template.BasePath "/etc/overlord/_jvm.config.tpl") . | indent 4  }}
+  runtime.properties: |
+{{ include (print $.Template.BasePath "/etc/overlord/_runtime.properties.tpl") . | indent 4  }}

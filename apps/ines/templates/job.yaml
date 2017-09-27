@@ -1,0 +1,67 @@
+{{- if eq .Values.usecase.data "website" }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ template "name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      restartPolicy: OnFailure
+      volumes:
+      - name: config-volume
+        configMap:
+          name: kafka-config
+      containers:
+      - name: {{ .Chart.Name }}
+        image: {{ .Values.job.image.registry_path }}/{{ .Values.job.image.name }}:{{ .Values.job.image.tag }}
+        ports:
+        - containerPort: 9092
+        imagePullPolicy: Always
+        env:
+        - name: "KAFKA_FQDN"
+          value: "{{ .Values.endpoints.kafka }}"
+        env:
+        - name: "VORTRAEGE"
+          value: 1
+        command: 
+          - "/bin/sh"
+        args:
+          - "-c"
+          - |
+            apt-get update -qq && apt-get install -qq -y jq
+            while [ $(curl -o /dev/null --silent --head --write-out '%{http_code}\n' https://www.google.de) != 200 ]; do sleep 10; done
+            wget -qO- https://github.com/ericchiang/pup/releases/download/v0.4.0/pup_v0.4.0_linux_386.zip > test.zip && unzip test.zip && rm test.zip && mv pup /usr/bin/
+            if [ $VORTRAEGE = 1 ]; then 
+            echo "Insert content-pool/vortraege"
+            wget -O - https://www.inovex.de/de/content-pool/vortraege | \
+            /usr/bin/pup '.ce-talk json{}' |  \
+            jq -c '.[].children[].children | {created: .[0].datetime,channel_name: .[1].text,  username: .[2].text | split(" Speaker: ")[0] | ltrimstr("Veranstaltung: "),type: "presentation", message: .[2].text | split(" Speaker: ")[1],link: ("https://www.inovex.de/" + .[3].href)}' > talks.json
+            wc -l talks.json
+            cat talks.json | bin/kafka-console-producer.sh --broker-list $KAFKA_FQDN --topic test
+            fi
+            echo "Insert events"
+            wget -O - https://www.inovex.de/de/news-events/events/ | \
+            pup '.dp-calendar-event-list-item-text json{}' |  \
+            jq -c '.[] | {created: .children[0].children[0].datetime, channel_name: .children[0].text, link: .children[1].children[0].href,title: .children[1].children[0].text, desc: .children[2].text }' | \
+            bin/kafka-console-producer.sh --broker-list $KAFKA_FQDN --topic test
+            echo "Insert pressemitteilungen"
+            wget -O - https://www.inovex.de/de/news-events/pressemitteilungen/ | \
+            pup '.ce-list li json{}' |  \
+            jq -c '.[] | {created: .children[0].text | split(")")[1], link: ("https://www.inovex.de/" + .children[0].href), message: .children[0].text | split(")")[0] | ltrimstr("(") }' | \
+            bin/kafka-console-producer.sh --broker-list $KAFKA_FQDN --topic test
+            echo "Insert stellenangebote"
+            wget -O - https://www.inovex.de/de/karriere/stellenangebote/stellenangebote.html | \
+            pup '#joboffers tbody tr json{}' |  \
+            jq -c '.[] | {href: .children[0].children[].href, text: .children[0].children[0].text, place: .children[1].text, desc: .children[2].text, skill: .children[3].text}' | \
+            bin/kafka-console-producer.sh --broker-list $KAFKA_FQDN --topic test
+            echo "Finished"
+{{- end }}

@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jupyterhub-config
+  namespace: {{ .Values.image.namespace }}
+data:
+  admin-users: 'admin' # originally '<ADMIN_USER>'
+  oauth-whitelist: 'admin' # originally '<ADMIN_USER>'
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jhub-manifests
+  namespace: {{ .Values.image.namespace }}
+data:
+  jupyter-all-spark-notebook.json: |
+{{ include (print $.Template.BasePath "/etc/_jupyter-all-spark-notebook.json.tpl") . | indent 4  }}
+  jupyter-datascience-notebook.json: |
+{{ include (print $.Template.BasePath "/etc/_jupyter-datascience-notebook.json.tpl") . | indent 4  }}
+  jupyter-pyspark-notebook.json: |
+{{ include (print $.Template.BasePath "/etc/_jupyter-pyspark-notebook.json.tpl") . | indent 4  }}
+  jupyter-R-notebook.json: |
+{{ include (print $.Template.BasePath "/etc/_jupyter-R-notebook.json.tpl") . | indent 4  }}
+  jupyter-scipy-notebook.json: |
+{{ include (print $.Template.BasePath "/etc/_jupyter-scipy-notebook.json.tpl") . | indent 4  }}

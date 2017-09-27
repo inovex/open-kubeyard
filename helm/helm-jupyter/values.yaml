@@ -1,0 +1,8 @@
+image:
+  registry_path: "dockerImageRegestry"
+  name: "docker-jupyter"
+  namespace: "kubeyard"
+  pull_policy: "latest"
+
+service:
+  name: jupyter

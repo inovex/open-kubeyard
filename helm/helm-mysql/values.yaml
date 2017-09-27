@@ -1,0 +1,14 @@
+image:
+  registry_path: "dockerImageRegestry"
+  name: "docker-mysql"
+  tag: "latest"
+  pull_policy: "Always"
+  namespace: "kubeyard"
+persistence:
+  enabled: true
+  accessMode: ReadWriteOnce
+  size: 8Gi
+resources:
+  requests:
+    memory: 256Mi
+    cpu: 100m

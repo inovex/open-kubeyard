@@ -1,0 +1,98 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: spark-master
+  namespace: {{ .Values.image.namespace }}
+spec:
+  ports:
+    - port: 7077
+      targetPort: 7077
+  selector:
+    component: spark-master
+  type: LoadBalancer
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: spark-webui
+  namespace: {{ .Values.image.namespace }}
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    component: spark-master
+  type: LoadBalancer
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: spark-master
+  namespace: {{ .Values.image.namespace }}
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: spark-master
+    spec:
+      containers:
+        - name: spark-master
+          image: {{ .Values.image.registry_path }}/{{ .Values.image.name }}:{{ .Values.image.pull_policy }}
+          command: ["/start-master"]
+          ports:
+            - containerPort: 7077
+            - containerPort: 8080
+            - containerPort: 8081
+          resources:
+            requests:
+              cpu: 100m
+          imagePullPolicy: Always
+---
+kind: StorageClass
+apiVersion: storage.k8s.io/v1beta1
+metadata:
+  name: spark-master-disk
+  namespace: {{ .Values.image.namespace }}
+provisioner: kubernetes.io/gce-pd
+parameters:
+  type: pd-standard
+  zone: europe-west1-d
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: spark-webui-details
+  namespace: {{ .Values.image.namespace }}
+spec:
+  ports:
+    - port: 4040
+      targetPort: 4040
+  selector:
+    component: spark-worker
+  type: LoadBalancer
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: spark-worker
+  namespace: {{ .Values.image.namespace }}
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        component: spark-worker
+    spec:
+      containers:
+        - name: spark-worker
+          image: {{ .Values.image.registry_path }}/{{ .Values.image.name }}:{{ .Values.image.pull_policy }}
+          command: ["/start-worker"]
+          ports:
+            - containerPort: 8081
+            - containerPort: 8080
+            - containerPort: 4040
+          resources:
+            requests:
+              cpu: 100m
+          imagePullPolicy: Always

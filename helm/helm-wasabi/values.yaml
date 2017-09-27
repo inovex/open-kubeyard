@@ -1,0 +1,24 @@
+
+image:
+  registry_path: "dockerImageRegestry"
+  name: "docker-wasabi"
+  tag: "latest"
+  namespace: "kubeyard"
+
+wasabi:
+  host: ""
+init:
+  container:
+    registry_path: "dockerImageRegestry"
+    name: "docker-wasabi-init"
+    tag: "latest"
+    pull_policy: "Always"
+    namespace: "kubeyard"
+    credentials:
+      name: "mysql-password"
+      key: "root-password"
+helm-cassandra:
+  image:
+    tag: 2.1
+  cassandra:
+    replicas: 1

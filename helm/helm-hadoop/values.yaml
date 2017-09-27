@@ -1,0 +1,33 @@
+image:
+  registry_path: "dockerImageRegestry"
+  name: "docker-hadoop"
+  tag: "latest"
+  pull_policy: "Always"
+hdfs:
+  namenode:
+    persistence:
+      enabled: true
+      ## If defined, volume.beta.kubernetes.io/storage-class: <storageClass>
+      ## Default: volume.alpha.kubernetes.io/storage-class: default
+      ##
+      # storageClass:
+      accessMode: ReadWriteOnce
+      size: 8Gi
+    resources: {}
+    ports:
+      ipc: 9000
+      http: 50070
+  datanode:
+    persistence:
+      enabled: true
+      ## If defined, volume.beta.kubernetes.io/storage-class: <storageClass>
+      ## Default: volume.alpha.kubernetes.io/storage-class: default
+      ##
+      # storageClass:
+      accessMode: ReadWriteOnce
+      size: 8Gi
+    resources: {}
+    ports:
+      xceiver: 50010
+      ipc: 50020
+      http: 50075

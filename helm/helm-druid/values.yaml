@@ -1,0 +1,25 @@
+image:
+  registry_path: "dockerImageRegestry"
+  name: "docker-druid"
+  pull_policy: "Always"
+  namespace: "kubeyard"
+  tag: "latest"
+broker:
+  resources:
+coordinator:
+  resources:
+historical:
+  resources:
+middlemanager:
+  resources:
+overlord:
+  resources:
+peon1: {}
+peon2: {}
+peon3: {}
+mysql: {}
+hadoop:
+  ports: {}
+zookeeper: {}
+init:
+  zookeeper: zookeeper

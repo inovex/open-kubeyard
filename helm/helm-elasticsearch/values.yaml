@@ -1,0 +1,5 @@
+image:
+  registry_path: "dockerImageRegestry"
+  name: "docker-elasticsearch"
+  tag: "latest"
+  namespace: "kubeyard"

@@ -1,0 +1,8 @@
+image:
+  registry_path: "dockerImageRegestry"
+  name: "docker-tranquility"
+  tag: "latest"
+  namespace: "kubeyard"
+  pull_policy: "Always"
+zookeeper:
+  ports: {}

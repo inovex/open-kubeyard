@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: logstash-service
+  namespace: {{ .Values.image.namespace }}
+spec:
+  ports:
+    - port: 9092
+      targetPort: 9092
+      name: kafka
+  selector:
+    app: logstash
+  type: LoadBalancer

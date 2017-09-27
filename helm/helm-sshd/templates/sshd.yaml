@@ -1,0 +1,40 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: sshd-service
+  namespace: {{ .Values.image.namespace }}
+spec:
+  ports:
+    - port: 22
+      targetPort: 22
+      protocol: TCP
+      name: ssh
+  selector:
+    app: sshd
+  type: LoadBalancer
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: sshd
+  namespace: {{ .Values.image.namespace }}
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: sshd
+    spec:
+      containers:
+        - name: sshd
+          image: "{{ .Values.image.registry_path }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
+          env:
+            - name: AUTHORIZED_KEYS
+              valueFrom:
+                secretKeyRef:
+                  name: sshdsecret
+                  key: pubkey
+          ports:
+            - containerPort: 22
+          imagePullPolicy: {{ .Values.image.pull_policy}}
+      restartPolicy: Always

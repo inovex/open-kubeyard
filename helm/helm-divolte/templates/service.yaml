@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  type: LoadBalancer
+  ports:
+  - name: divolte
+    port: {{ default 8290 .Values.port }}
+    targetPort: divolte
+    protocol: TCP
+  selector:
+    app: {{ template "fullname" . }}

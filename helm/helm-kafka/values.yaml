@@ -1,0 +1,9 @@
+image:
+  registry_path: "dockerImageRegestry"
+  name: "docker-kafka"
+  tag: "latest"
+  namespace: "kubeyard"
+kafka:
+  log_dirs: /mnt/volumne/kafka-pv/logs
+  zookeeper_connect: zookeeper:2181
+  enable_topic_delete: true

@@ -1,0 +1,44 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: kafka
+  namespace: {{ .Values.image.namespace }}
+spec:
+  serviceName: "kafka"
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: kafka
+      annotations:
+       checksum/config-etc: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+    spec:
+      containers:
+      - name: kafka
+        image: {{ .Values.image.registry_path }}/{{ .Values.image.name }}:{{ .Values.image.tag }}
+        ports:
+        - containerPort: 9092
+        imagePullPolicy: Always
+        command:
+        - sh
+        - -c
+        - "./bin/kafka-server-start.sh /etc/kafka/server.properties --override broker.id=$(hostname | awk -F'-' '{print $2}')"
+        volumeMounts:
+        - name: kafka-pv
+          mountPath: /mnt/volume/kafka-pv
+        - name: config-volume
+          mountPath: /etc/kafka
+      volumes:
+      - name: config-volume
+        configMap:
+          name: kafka-config
+  volumeClaimTemplates:
+  - metadata:
+      name: kafka-pv
+      annotations:
+        volume.alpha.kubernetes.io/storage-class: anything
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi

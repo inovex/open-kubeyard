@@ -1,0 +1,8 @@
+image:
+  registry_path: "dockerImageRegestry"
+  name: "docker-sshd"
+  tag: "latest"
+  pull_policy: "Always"
+  namespace: "kubeyard"
+#add your custom ssh key here
+pubkey: ssh-rsa-key

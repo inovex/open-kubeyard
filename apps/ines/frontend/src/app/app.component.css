@@ -1,0 +1,8 @@
+html {
+  font: Lato;
+}
+
+a.message:hover {
+  color: #003C7E !important;
+  text-decoration: underline !important;
+}

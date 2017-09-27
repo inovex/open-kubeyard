@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mattermost-loader-deployment
+  namespace: {{ .Values.image.namespace }}
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: mattermost-loader
+    spec:
+      containers:
+        - name: mattermost-loader
+          image: {{ .Values.image.registry_path }}/{{ .Values.image.name }}:{{ .Values.image.tag }}
+          ports:
+            - containerPort: 8250
+          imagePullPolicy: Always

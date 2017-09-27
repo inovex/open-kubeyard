@@ -1,0 +1,55 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  namespace: {{ .Values.image.namespace }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}
+      annotations:
+        checksum/config-etc: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum  }}
+    spec:
+      containers:
+      - name: superset
+        image: "{{ .Values.image.registry_path }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pull_policy }}
+        ports:
+        - name: http
+          containerPort: 8088
+          protocol: TCP
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8088
+          initialDelaySeconds: 15
+          timeoutSeconds: 1
+        volumeMounts:
+        - mountPath: /home/superset/superset_config.py
+          name: config-volume
+      initContainers:
+      - name: wait-for-mysql
+        image: busybox
+        command: ['sh', '-c', 'until nslookup  {{ default "mysql-service" .Values.mysql.name }}; do echo waiting for mysql; sleep 2; done;']
+      - name: wait-for-redis
+        image: busybox
+        command: ['sh', '-c', 'until nslookup  {{ default "redis-service" .Values.redis.name }}; do echo waiting for redis; sleep 2; done;']
+      - name: upgrade-db
+        image: {{ .Values.image.registry_path }}/{{ .Values.image.name }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.image.pull_policy }}
+        command: ['sh', '-c', 'superset db upgrade']
+        volumeMounts:
+        - name: config-volume
+          mountPath: /home/superset/superset-config.py
+      volumes:
+      - name: config-volume
+        configMap:
+          name: {{ template "fullname" . }}

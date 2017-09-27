@@ -1,0 +1,59 @@
+#  {{ .Name }}
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "fullname" . }}
+    version: v1
+    chart: "{{ .Chart.Name }}"
+spec:
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}
+        chart: {{ .Chart.Name }}
+        release: {{ .Release.Name }}
+        version: v1
+    spec:
+      volumes:
+      - name: secret-volume
+        secret:
+          secretName: "{{.Release.Name}}-ssl-cert"
+      nodeSelector:
+        role: loadbalancer
+      containers:
+      - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: {{ .Values.main.internalPort }}
+            scheme: HTTP
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        name: {{ .Chart.Name }}
+        ports:
+        {{- range .Values.serviceHttp }}
+        - containerPort: {{ .containerPort }}
+          hostPort: {{ .hostPort }}
+          protocol: {{ .protocol | quote }}
+        {{- end }}
+        {{- range .Values.serviceTcp }}
+        - containerPort: {{ .containerPort }}
+          hostPort: {{ .hostPort }}
+          protocol: {{ .protocol | quote }}
+        {{- end }}
+        args:
+        - --tcp-services={{ .Values.tcpServices }}
+        #  {{- range  $key, $val := .Values.serviceTcp }}
+        #  {{- $key }}:{{ .hostPort }},
+        # {{- end }}  
+        - --ssl-cert=/ssl/cert.pem
+        - --namespace={{ .Values.main.namespace }}
+        volumeMounts:
+        - mountPath: "/ssl"
+          name: secret-volume
+        resources:
+{{ toYaml .Values.resources | indent 10 }}

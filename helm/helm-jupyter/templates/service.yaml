@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ template "fullname" . }}
+  namespace: {{ .Values.image.namespace }}
+spec:
+  ports:
+    - port: 8888
+      targetPort: 8888
+      name: web-ui
+  selector:
+    component: {{ template "fullname" . }}
+  type: LoadBalancer

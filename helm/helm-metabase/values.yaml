@@ -1,0 +1,4 @@
+image:
+  name: "metabase/metabase"
+  tag: "v0.23.1"
+  pull_policy: "IfNotPresent"

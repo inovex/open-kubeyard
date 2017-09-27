@@ -1,0 +1,9 @@
+image:
+  repo: "dockerImageRegestry"
+  name: "docker-divolte"
+  tag: "latest"
+  pull_policy: "Always"
+kafka:
+  hosts:
+      name: kafka
+      port: 9092

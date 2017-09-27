@@ -1,0 +1,1 @@
+Built as in [Setting up ExternalDNS on Google Container Engine](https://github.com/kubernetes-incubator/external-dns/blob/master/docs/tutorials/gke.md)

@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+data:
+  capacity-scheduler.xml: |
+{{ include (print $.Template.BasePath "/etc/_capacity-scheduler.xml.tpl") . | indent 4  }}
+  configuration.xsl: |
+{{ include (print $.Template.BasePath "/etc/_configuration.xsl.tpl") . | indent 4  }}
+  container-executor.cfg: |
+{{ include (print $.Template.BasePath "/etc/_container-executor.cfg.tpl") . | indent 4  }}
+  core-site.xml: |
+{{ include (print $.Template.BasePath "/etc/_core-site.xml.tpl") . | indent 4  }}
+  hadoop-env.cmd: |
+{{ include (print $.Template.BasePath "/etc/_hadoop-env.cmd.tpl") . | indent 4  }}
+  hadoop-env.sh: |
+{{ include (print $.Template.BasePath "/etc/_hadoop-env.sh.tpl") . | indent 4  }}
+  hadoop-metrics.properties: |
+{{ include (print $.Template.BasePath "/etc/_hadoop-metrics.properties.tpl") . | indent 4  }}
+  hadoop-metrics2.properties: |
+{{ include (print $.Template.BasePath "/etc/_hadoop-metrics2.properties.tpl") . | indent 4  }}
+  hadoop-policy.xml: |
+{{ include (print $.Template.BasePath "/etc/_hadoop-policy.xml.tpl") . | indent 4  }}
+  hdfs-site.xml: |
+{{ include (print $.Template.BasePath "/etc/_hdfs-site.xml.tpl") . | indent 4  }}
+  httpfs-env.sh: |
+{{ include (print $.Template.BasePath "/etc/_httpfs-env.sh.tpl") . | indent 4  }}
+  httpfs-log4j.properties: |
+{{ include (print $.Template.BasePath "/etc/_httpfs-log4j.properties.tpl") . | indent 4  }}
+  httpfs-signature.secret: |
+{{ include (print $.Template.BasePath "/etc/_httpfs-signature.secret.tpl") . | indent 4  }}
+  httpfs-site.xml: |
+{{ include (print $.Template.BasePath "/etc/_httpfs-site.xml.tpl") . | indent 4  }}
+  kms-acls.xml: |
+{{ include (print $.Template.BasePath "/etc/_kms-acls.xml.tpl") . | indent 4  }}
+  kms-env.sh: |
+{{ include (print $.Template.BasePath "/etc/_kms-env.sh.tpl") . | indent 4  }}
+  kms-log4j.properties: |
+{{ include (print $.Template.BasePath "/etc/_kms-log4j.properties.tpl") . | indent 4  }}
+  kms-site.xml: |
+{{ include (print $.Template.BasePath "/etc/_kms-site.xml.tpl") . | indent 4  }}
+  log4j.properties: |
+{{ include (print $.Template.BasePath "/etc/_log4j.properties.tpl") . | indent 4  }}
+  mapred-env.cmd: |
+{{ include (print $.Template.BasePath "/etc/_mapred-env.cmd.tpl") . | indent 4  }}
+  mapred-env.sh: |
+{{ include (print $.Template.BasePath "/etc/_mapred-env.sh.tpl") . | indent 4  }}
+  mapred-queues.xml.template: |
+{{ include (print $.Template.BasePath "/etc/_mapred-queues.xml.template.tpl") . | indent 4  }}
+  mapred-site.xml.template: |
+{{ include (print $.Template.BasePath "/etc/_mapred-site.xml.template.tpl") . | indent 4  }}
+  slaves: |
+{{ include (print $.Template.BasePath "/etc/_slaves.tpl") . | indent 4  }}
+  ssl-client.xml.example: |
+{{ include (print $.Template.BasePath "/etc/_ssl-client.xml.example.tpl") . | indent 4  }}
+  ssl-server.xml.example: |
+{{ include (print $.Template.BasePath "/etc/_ssl-server.xml.example.tpl") . | indent 4  }}
+  yarn-env.cmd: |
+{{ include (print $.Template.BasePath "/etc/_yarn-env.cmd.tpl") . | indent 4  }}
+  yarn-env.sh: |
+{{ include (print $.Template.BasePath "/etc/_yarn-env.sh.tpl") . | indent 4  }}
+  yarn-site.xml: |
+{{ include (print $.Template.BasePath "/etc/_yarn-site.xml.tpl") . | indent 4  }}

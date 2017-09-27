@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+data:
+  application.ini: |
+{{ include (print $.Template.BasePath "/etc/_application.ini.tpl") . | indent 4  }}
+  kafka.json: |
+{{ include (print $.Template.BasePath "/etc/_kafka.json.tpl") . | indent 4  }}
+  logback.xml: |
+{{ include (print $.Template.BasePath "/etc/_logback.xml.tpl") . | indent 4  }}

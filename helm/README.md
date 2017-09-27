@@ -1,0 +1,1 @@
+These projects create the helm charts needed for the cloud platform. You can use the ```package.sh``` To build all the charts. After all the charts have been packaged you can just install components using ```helm install```.

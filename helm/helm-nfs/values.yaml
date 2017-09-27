@@ -1,0 +1,8 @@
+image:
+  registry_path: "gcr.io/google_containers"
+  name: "volume-nfs"
+  tag: "0.8"
+  namespace: "kubeyard"
+volume:
+  storageClass: any
+  storage: 10Gi

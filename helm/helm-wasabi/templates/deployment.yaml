@@ -1,0 +1,54 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: wasabi
+  namespace: {{ .Values.image.namespace }}
+  labels:
+    app: wasabi
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: wasabi
+    spec:
+      containers:
+        - name: wasabi
+          image: {{ .Values.image.registry_path }}/{{ .Values.image.name }}:{{ .Values.image.tag }}
+          ports:
+            - containerPort: 8080
+            - containerPort: 8090
+            - containerPort: 8180
+          imagePullPolicy: Always
+          env:
+            - name: WASABI_CONFIGURATION
+              value: "-DnodeHosts=cassandra-service -Ddatabase.url.host=mysql-service"
+          args:
+            - wasabi
+        - name: wasabi-ui
+          image: {{ .Values.image.registry_path }}/{{ .Values.image.name }}:{{ .Values.image.tag }}
+          ports:
+            - containerPort: 9000
+          imagePullPolicy: Always
+          env:
+            - name: API_HOST
+              value: "http://{{ .Values.wasabi.host }}:8080/api/v1"
+          args:
+            - ui
+      initContainers:
+        - name: wasabi-init
+          image: {{ .Values.init.container.registry_path }}/{{ .Values.init.container.name }}:{{ .Values.init.container.tag }}
+          env:
+            - name: CASSANDRA_KEYSPACE_PREFIX
+              value: wasabi
+            - name: CQLSH_HOST
+              value: cassandra-service
+            - name: CASSANDRA_PORT
+              value: "9042"
+            - name: MYSQL_HOST
+              value: mysql-service
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.init.container.credentials.name }}
+                  key: name: {{ .Values.init.container.credentials.key }}

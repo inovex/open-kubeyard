@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+data:
+  divolte-collector.conf: |
+{{ include (print $.Template.BasePath "/etc/_divolte-collector.conf.tpl") . | indent 4  }}
+  divolte-env.sh: |
+{{ include (print $.Template.BasePath "/etc/_divolte-env.sh.tpl") . | indent 4  }}
+  logback.xml: |
+{{ include (print $.Template.BasePath "/etc/_logback.xml.tpl") . | indent 4  }}
+  CustomEventRecord.avsc: |
+{{ include (print $.Template.BasePath "/etc/_CustomEventRecord.avsc.tpl") . | indent 4  }}
+  custom-mapping.groovy: |
+{{ include (print $.Template.BasePath "/etc/_custom-mapping.groovy.tpl") . | indent 4  }}

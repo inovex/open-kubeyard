@@ -1,0 +1,13 @@
+image:
+  name: "nginx"
+  tag: "1.10.3-alpine"
+  pull_policy: "IfNotPresent"
+resources:
+  requests:
+    memory: 256Mi
+    cpu: 250m
+ports:
+  http: 80
+  https: 443
+divolte:
+  name: "helm-divolte"

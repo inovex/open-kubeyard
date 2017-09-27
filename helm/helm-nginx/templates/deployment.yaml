@@ -1,0 +1,49 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}
+      annotations:
+        checksum/config-etc: {{ include (print $.Template.BasePath "/configmap-etc.yaml") . | sha256sum  }}
+    spec:
+      containers:
+      - name: website
+        image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pull_policy }}
+        env:
+        - name: NGINX_HOST
+          value: {{ template "fullname" . }}
+        - name: NGINX_PORT
+          value: "80"
+        ports:
+        - name: http
+          containerPort: 80
+          protocol: TCP
+        - name: https
+          containerPort: 443
+          protocol: TCP
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+        volumeMounts:
+        - mountPath: /etc/nginx/nginx.conf
+          name: config-volume
+          subPath: nginx.conf
+        - mountPath: /etc/nginx/key.pem
+          name: config-volume
+          subPath: key.pem
+        - mountPath: /etc/nginx/cert.pem
+          name: config-volume
+          subPath: cert.pem
+      volumes:
+      - name: config-volume
+        configMap:
+          name: {{ template "fullname" . }}-etc
